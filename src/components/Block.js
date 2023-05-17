@@ -1,8 +1,8 @@
 // @ts-check
 
-import { keyDownHandler } from "./handlers/keyDownHandler.js";
+import { keyDownHandler } from "../handlers/keyDownHandler.js";
 
-export default class EditableDiv extends HTMLDivElement {
+export default class Block extends HTMLDivElement {
   static Types = /** @type {const} */ ({
     Default: "default",
     Title1: "title1",
@@ -21,7 +21,7 @@ export default class EditableDiv extends HTMLDivElement {
     this.setAttribute("contenteditable", "true");
     this.addEventListener("keydown", keyDownHandler.bind(this));
 
-    this.type = EditableDiv.Types.Default;
+    this.type = Block.Types.Default;
   }
 
   getCursorPosition() {
@@ -60,4 +60,4 @@ export default class EditableDiv extends HTMLDivElement {
   }
 }
 
-customElements.define("editable-div", EditableDiv, { extends: "div" });
+customElements.define("editable-div", Block, { extends: "div" });

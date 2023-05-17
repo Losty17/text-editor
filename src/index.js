@@ -1,4 +1,4 @@
-import TextEditor from "./TextEditor.js";
+import Editor from "./components/Editor.js";
 
-const textEditor = new TextEditor();
-textEditor.init();
+const Editor = new Editor();
+Editor.init();

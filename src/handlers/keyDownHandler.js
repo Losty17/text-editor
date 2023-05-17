@@ -1,11 +1,11 @@
 // @ts-check
 
-import EditableDiv from "../EditableDiv.js";
+import Block from "../components/Block.js";
 
 /**
  *
  * @param {KeyboardEvent} event
- * @this {EditableDiv}
+ * @this {Block}
  */
 export function keyDownHandler(event) {
   if (this.innerText === "" && event.key === "/") {

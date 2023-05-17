@@ -1,13 +1,10 @@
 // @ts-check
 
-import EditableDiv from "./EditableDiv.js";
+import Block from "./Block.js";
 
-export default class TextEditor {
+export default class Editor {
   constructor() {
-    /**
-     * @type {Array<EditableDiv>}
-     */
-    this.blocks = [];
+    this.blocks = /** @type {Block[]} */ ([]);
     this.element = document.createElement("div");
   }
 
@@ -19,13 +16,18 @@ export default class TextEditor {
     this.blocks.forEach((block) => this.element.appendChild(block));
   }
 
+  /**
+   * @todo implement this
+   */
   destroy() {}
 
   /**
-   * @returns {EditableDiv}
+   * Creates an empty block element
+   *
+   * @returns {Block}
    */
   createBlock() {
-    return /** @type {EditableDiv} */ (
+    return /** @type {Block} */ (
       document.createElement("div", {
         is: "editable-div",
       })
