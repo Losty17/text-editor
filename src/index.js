@@ -1,4 +1,4 @@
 import Editor from "./components/Editor.js";
 
-const Editor = new Editor();
-Editor.init();
+const editor = new Editor();
+editor.init();
