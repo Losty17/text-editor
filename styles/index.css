@@ -6,6 +6,7 @@ body {
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* --- text editor --- */
 .text-editor {
     display: flex;
     flex-direction: column;
@@ -21,4 +22,41 @@ body {
 
 .text-editor-block:focus {
     outline: none;
+}
+
+/* --- command palette --- */
+.command-palette {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 4rem;
+    padding: 8px;
+    border-radius: 6px;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
+    animation-timing-function: cubic-bezier(.5,.1,.4,2);
+}
+
+@keyframes command-palette-appear {
+    0% {
+        transform: scale(.9);
+        opacity: 0%;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 100%;
+    }
+}
+
+@keyframes command-palette-disappear {
+    0% {
+        transform: scale(1);
+        opacity: 100%;
+    }
+    100% {
+        transform: scale(.9);
+        opacity: 0%;
+    }
 }

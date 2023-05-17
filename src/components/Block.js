@@ -3,6 +3,7 @@
 import { keyDownHandler } from "../handlers/keyDownHandler.js";
 
 export default class Block extends HTMLDivElement {
+  static Padding = 8;
   static Types = /** @type {const} */ ({
     Default: "default",
     Title1: "title1",
@@ -28,17 +29,15 @@ export default class Block extends HTMLDivElement {
     let position = 0;
     const isSupported = typeof window.getSelection !== "undefined";
 
-    if (isSupported) {
-      const selection = window.getSelection();
+    const selection = window.getSelection();
 
-      if (selection.rangeCount !== 0) {
-        const range = window.getSelection().getRangeAt(0);
-        const preCaretRange = range.cloneRange();
+    if (selection.rangeCount !== 0) {
+      const range = window.getSelection().getRangeAt(0);
+      const preCaretRange = range.cloneRange();
 
-        preCaretRange.selectNodeContents(this);
-        preCaretRange.setEnd(range.endContainer, range.endOffset);
-        position = preCaretRange.toString().length;
-      }
+      preCaretRange.selectNodeContents(this);
+      preCaretRange.setEnd(range.endContainer, range.endOffset);
+      position = preCaretRange.toString().length;
     }
 
     return position;
@@ -58,6 +57,27 @@ export default class Block extends HTMLDivElement {
     sel.removeAllRanges();
     sel.addRange(range);
   }
+
+  getLineHeight() {
+    var temp = document.createElement(this.nodeName),
+      ret;
+    temp.setAttribute(
+      "style",
+      "margin:0; padding:0; " +
+        "font-family:" +
+        (this.style.fontFamily || "inherit") +
+        "; " +
+        "font-size:" +
+        (this.style.fontSize || "inherit")
+    );
+    temp.innerHTML = "A";
+
+    this.parentNode.appendChild(temp);
+    ret = temp.clientHeight;
+    temp.parentNode.removeChild(temp);
+
+    return ret;
+  }
 }
 
-customElements.define("editable-div", Block, { extends: "div" });
+customElements.define("editor-block", Block, { extends: "div" });

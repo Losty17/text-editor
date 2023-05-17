@@ -1,14 +1,20 @@
 // @ts-check
 
-import Block from "../components/Block.js";
+import destroyElements from "../utils/destroyElements.js";
 
 /**
  *
  * @param {KeyboardEvent} event
- * @this {Block}
  */
 export function keyDownHandler(event) {
-  if (this.innerText === "" && event.key === "/") {
-    console.log("display command palette");
-  }
+  if (event.key === "Backspace") destroyElements(".command-palette");
+  else if (event.key === "/")
+    document.dispatchEvent(
+      new CustomEvent("newCommandPalette", {
+        detail: {
+          block: this,
+          triggerEvent: event,
+        },
+      })
+    );
 }
