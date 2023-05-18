@@ -4,15 +4,13 @@ import { keyDownHandler } from "../handlers/keyDownHandler.js";
 
 export default class Block extends HTMLDivElement {
   static Padding = 8;
+  static DefaultPlaceholder = "Type '/' for commands";
   static Types = /** @type {const} */ ({
     Default: "default",
-    Title1: "title1",
-    Title2: "title2",
-    Title3: "title3",
-    Title4: "title4",
-    Title5: "title5",
-    Title6: "title6",
-    Paragraph: "paragraph",
+    Title: "h1",
+    Subtitle: "h2",
+    Heading: "h3",
+    Subheading: "h4",
   });
 
   constructor() {
@@ -23,11 +21,27 @@ export default class Block extends HTMLDivElement {
     this.addEventListener("keydown", keyDownHandler.bind(this));
 
     this.type = Block.Types.Default;
+    this.placeholder = Block.DefaultPlaceholder;
+  }
+
+  get type() {
+    return this.getAttribute("type");
+  }
+
+  set type(value) {
+    this.setAttribute("type", value);
+  }
+
+  get placeholder() {
+    return this.getAttribute("placeholder");
+  }
+
+  set placeholder(value) {
+    this.setAttribute("placeholder", value);
   }
 
   getCursorPosition() {
     let position = 0;
-    const isSupported = typeof window.getSelection !== "undefined";
 
     const selection = window.getSelection();
 
