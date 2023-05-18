@@ -28,8 +28,8 @@ jobs:
         git config user.name "Bini Bot"
         git config user.email "vinikappke@gmail.com"
         git fetch
-        git checkout deploy
-        npx webpack --mode production -o .
-        git add .
+        git checkout master
+        npx webpack --mode production -o ./dist
+        git add dist
         git commit -m "Update build files"
         git push
