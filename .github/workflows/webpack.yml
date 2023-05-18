@@ -26,3 +26,6 @@ jobs:
       run: |
         npm install
         npx webpack
+        git add dist
+        git commit -m "Update build files"
+        git push
