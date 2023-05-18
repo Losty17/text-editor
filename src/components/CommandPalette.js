@@ -1,9 +1,41 @@
 // @ts-check
 
+const commands = [
+  {
+    name: "Title",
+    type: "title",
+    icon: "h1",
+    shortcut: "",
+    description: "Convert the selected block into a Title.",
+  },
+  {
+    name: "Subtitle",
+    type: "subtitle",
+    icon: "h2",
+    shortcut: "",
+    description: "Convert the selected block into a Subtitle.",
+  },
+  {
+    name: "Heading",
+    type: "heading",
+    icon: "h3",
+    shortcut: "",
+    description: "Convert the selected block into a Heading.",
+  },
+  {
+    name: "Subheading",
+    type: "subheading",
+    icon: "h4",
+    shortcut: "",
+    description: "Convert the selected block into a Subheading.",
+  },
+];
+
 export default class CommandPalette extends HTMLDivElement {
   constructor() {
     super();
-
+    this.commandList = /** @type {HTMLElement[]} */ ([]);
+    this.selectedCommand = 0;
     this.classList.add("command-palette");
   }
 
@@ -16,6 +48,7 @@ export default class CommandPalette extends HTMLDivElement {
     this.style.top = `${y}px`;
     this.style.transform = "scale(.8)";
     this.style.opacity = "0%";
+    this.#buildCommandList();
     document.body.appendChild(this);
 
     this.style.animationName = "command-palette-appear";
@@ -26,9 +59,98 @@ export default class CommandPalette extends HTMLDivElement {
   destroy() {
     this.style.animationName = "command-palette-disappear";
 
-    setTimeout(() => {
-      this.remove();
-    }, 200);
+    setTimeout(() => this.remove(), 200);
+  }
+
+  /**
+   *
+   * @param {string} key
+   */
+  changeSelectedCommand(key) {
+    if (key === "ArrowUp") {
+      this.selectedCommand =
+        this.selectedCommand === 0 ? 0 : this.selectedCommand - 1;
+    } else {
+      this.selectedCommand =
+        this.selectedCommand === this.commandList.length - 1
+          ? this.commandList.length - 1
+          : this.selectedCommand + 1;
+    }
+
+    this.#updateSelectedState();
+  }
+
+  executeCommand() {
+    const { type } = this.commandList[this.selectedCommand].dataset;
+
+    console.log("type", type);
+
+    this.destroy();
+  }
+
+  #updateSelectedState() {
+    this.querySelectorAll(".selected").forEach((element) =>
+      element.classList.remove("selected")
+    );
+
+    this.commandList[this.selectedCommand].classList.add("selected");
+  }
+
+  #buildCommandList() {
+    commands.forEach((command) => {
+      const { name, type, icon, shortcut, description } = command;
+
+      const iconElement = document.createElement("span");
+      iconElement.classList.add("command-palette-command-icon");
+      iconElement.setAttribute("data-icon", icon);
+
+      const commandElement = document.createElement("div");
+      commandElement.classList.add("command-palette-command");
+
+      const nameElementContainer = document.createElement("span");
+      nameElementContainer.classList.add(
+        "command-palette-command-name-container"
+      );
+
+      const nameElement = document.createElement("span");
+      nameElement.classList.add("command-palette-command-name");
+      nameElement.innerText = name;
+
+      const shortcutElement = document.createElement("span");
+      shortcutElement.classList.add("command-palette-command-shortcut");
+      shortcutElement.innerText = shortcut ? `(${shortcut})` : "";
+
+      nameElementContainer.appendChild(nameElement);
+      nameElementContainer.appendChild(shortcutElement);
+
+      const descriptionElement = document.createElement("span");
+      descriptionElement.classList.add("command-palette-command-description");
+      descriptionElement.innerText = `${description}`;
+
+      const contentElement = document.createElement("span");
+      contentElement.classList.add("command-palette-command-content");
+
+      contentElement.appendChild(nameElementContainer);
+      contentElement.appendChild(descriptionElement);
+
+      commandElement.appendChild(iconElement);
+      commandElement.appendChild(contentElement);
+
+      commandElement.setAttribute("data-type", type);
+      commandElement.addEventListener("click", () => {
+        this.selectedCommand = this.commandList.indexOf(commandElement);
+        this.executeCommand();
+      });
+      commandElement.addEventListener("mouseenter", () => {
+        this.selectedCommand = this.commandList.indexOf(commandElement);
+        this.#updateSelectedState();
+      });
+
+      this.appendChild(commandElement);
+      this.commandList.push(commandElement);
+    });
+
+    this.#updateSelectedState();
   }
 }
 

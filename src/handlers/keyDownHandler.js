@@ -37,13 +37,8 @@ export function keyDownHandler(event) {
       break;
 
     case "ArrowUp":
-      event.preventDefault();
-      /** @type {HTMLElement} */ (this.previousSibling)?.focus();
-      break;
-
     case "ArrowDown":
-      event.preventDefault();
-      /** @type {HTMLElement} */ (this.nextSibling)?.focus();
+      eventName = "changeFocus";
       break;
 
     default:
@@ -54,5 +49,6 @@ export function keyDownHandler(event) {
     dispatchEvent(eventName, {
       block: this,
       trigger: event,
+      key: event.key,
     });
 }

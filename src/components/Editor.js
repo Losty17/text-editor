@@ -28,6 +28,21 @@ export default class Editor {
 
     this.blocks.forEach((block) => this.element.appendChild(block));
 
+    addEventListener("contextmenu", (event) => {
+      event.preventDefault();
+      if (this.commandPalette) return;
+      // @ts-ignore
+      const { clientX: x, clientY: y } = event;
+
+      const commandPalette = /** @type {CommandPalette} */ (
+        document.createElement("div", {
+          is: "command-palette",
+        })
+      ).init(x, y);
+
+      this.commandPalette = commandPalette;
+    });
+
     addEventListener("newCommandPalette", (event) => {
       if (this.commandPalette) return;
 
@@ -54,14 +69,28 @@ export default class Editor {
       const { block, trigger } = event.detail;
       trigger.preventDefault();
 
+      if (this.commandPalette) return this.commandPalette.executeCommand();
+
       const newBlock = this.createBlock();
       block.after(newBlock);
       this.blocks.push(newBlock);
-      
+
       newBlock.focus();
-      
+
       if (block !== this.pageTitle) block.placeholder = "";
       block.blur();
+    });
+
+    addEventListener("changeFocus", (event) => {
+      const { block, trigger, key } = event.detail;
+
+      if (!this.commandPalette)
+        return /** @type {Block} */ (
+          key === "ArrowUp" ? block.previousSibling : block.nextSibling
+        )?.focus();
+
+      trigger.preventDefault();
+      this.commandPalette.changeSelectedCommand(key);
     });
 
     return this;
