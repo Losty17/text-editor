@@ -1,3 +1,10 @@
-import Editor from "./components/Editor.js";
+// @ts-check
 
-const editor = new Editor().init();
+import Editor from "./components/Editor.js";
+import "./styles/vars.css";
+import "./styles/index.css";
+import "./styles/texteditor.css";
+import "./styles/commandpalette.css";
+
+const editor = new Editor(document.body);
+editor.init();

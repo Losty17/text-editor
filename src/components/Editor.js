@@ -8,16 +8,21 @@ import addEventListener from "../utils/addEventListener.js";
  * @todo refactor to extend HTMLDivElement
  */
 export default class Editor {
-  constructor() {
-    this.blocks = /** @type {Block[]} */ ([]);
+  /**
+   *
+   * @param {HTMLElement} root
+   */
+  constructor(root) {
+    this.root = root;
     this.element = document.createElement("div");
-    this.commandPalette = /** @type {CommandPalette} */ (undefined);
+    this.blocks = /** @type {Block[]} */ ([]);
     this.pageTitle = /** @type {Block} */ (undefined);
+    this.commandPalette = /** @type {CommandPalette} */ (undefined);
   }
 
   init() {
     this.element.classList.add("text-editor");
-    document.body.appendChild(this.element);
+    this.root.appendChild(this.element);
 
     if (this.blocks.length === 0) {
       this.pageTitle = this.createBlock("h1");

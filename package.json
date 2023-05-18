@@ -1,16 +1,21 @@
 {
-  "devDependencies": {
-    "@babel/cli": "^7.0.0-beta.40",
-    "@babel/core": "^7.0.0-beta.40",
-    "@babel/plugin-proposal-class-properties": "^7.18.6",
-    "babel-loader": "^8.0.0-beta.0",
-    "babel-preset-es2015": "^7.0.0-beta.0",
-    "gulp-babel": "^8.0.0",
-    "gulp-concat": "^2.6.1",
-    "gulp-uglify": "^3.0.2",
-    "map-stream": "^0.0.7"
+  "name": "webpack-demo",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm run dev-server",
+    "dev-server": "webpack-dev-server --devtool eval --mode development"
   },
-  "dependencies": {
-    "gulp": "^4.0.2"
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "css-loader": "^6.7.3",
+    "style-loader": "^3.3.2",
+    "webpack": "^5.83.1",
+    "webpack-cli": "^5.1.1",
+    "webpack-dev-server": "^4.15.0"
   }
 }
