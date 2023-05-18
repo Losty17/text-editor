@@ -26,6 +26,8 @@ jobs:
       run: |
         npm install
         npx webpack
+        git config user.name "Bini Bot"
+        git config user.email "vinikappke@gmail.com"
         git add dist
         git commit -m "Update build files"
         git push
