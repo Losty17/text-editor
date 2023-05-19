@@ -92,6 +92,13 @@ export default class Block extends HTMLDivElement {
 
     return ret;
   }
+
+  toJSON() {
+    return {
+      type: this.type,
+      content: this.innerHTML,
+    };
+  }
 }
 
 customElements.define("editor-block", Block, { extends: "div" });

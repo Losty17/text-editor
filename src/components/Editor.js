@@ -122,4 +122,8 @@ export default class Editor {
     block.type = type;
     return block;
   }
+
+  toJSON() {
+    return { blocks: this.blocks.map((block) => block.toJSON()) };
+  }
 }

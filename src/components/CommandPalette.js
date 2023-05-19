@@ -1,30 +1,40 @@
 // @ts-check
 
+import dispatchEvent from "../utils/dispatchEvent.js";
+import Block from "./Block.js";
+
 const commands = [
   {
+    name: "Paragraph",
+    type: "default",
+    icon: "default",
+    shortcut: "",
+    description: "Convert the selected block into a simple Paragraph.",
+  },
+  {
     name: "Title",
-    type: "title",
+    type: "h1",
     icon: "h1",
     shortcut: "",
     description: "Convert the selected block into a Title.",
   },
   {
     name: "Subtitle",
-    type: "subtitle",
+    type: "h2",
     icon: "h2",
     shortcut: "",
     description: "Convert the selected block into a Subtitle.",
   },
   {
     name: "Heading",
-    type: "heading",
+    type: "h3",
     icon: "h3",
     shortcut: "",
     description: "Convert the selected block into a Heading.",
   },
   {
     name: "Subheading",
-    type: "subheading",
+    type: "h4",
     icon: "h4",
     shortcut: "",
     description: "Convert the selected block into a Subheading.",
@@ -77,15 +87,33 @@ export default class CommandPalette extends HTMLDivElement {
           : this.selectedCommand + 1;
     }
 
+    this.commandList[this.selectedCommand].scrollIntoView({
+      block: "end",
+      behavior: "smooth",
+    });
+
     this.#updateSelectedState();
   }
 
   executeCommand() {
     const { type } = this.commandList[this.selectedCommand].dataset;
+    const block = /** @type {Block} */ (
+      document.querySelector(".text-editor-block:focus")
+    );
 
-    console.log("type", type);
+    if (block) {
+      block.type = type;
+      const newText = block.innerText.substring(
+        0,
+        block.innerText.lastIndexOf("/")
+      );
 
-    this.destroy();
+      block.innerText = newText;
+    }
+
+    dispatchEvent("destroyCommandPalette", {
+      block,
+    });
   }
 
   #updateSelectedState() {
