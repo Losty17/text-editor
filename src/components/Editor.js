@@ -20,22 +20,51 @@ export default class Editor {
     this.commandPalette = /** @type {CommandPalette} */ (undefined);
   }
 
-  init() {
+  /**
+   *
+   * @param {{ blocks: { type: string; content: string }[] }} [json]
+   * @param {{ [eventName: string]: (event: Event, block: Block) => void }} [events]
+   * @returns
+   */
+  init(json, events) {
     this.element.classList.add("text-editor");
     this.root.appendChild(this.element);
 
-    if (this.blocks.length === 0) {
+    if (json) {
+      const { blocks } = json;
+
+      this.blocks = blocks.map((block) => {
+        const { type, content } = block;
+        const newBlock = this.createBlock(type);
+        newBlock.innerHTML = content;
+        return newBlock;
+      });
+
+      this.pageTitle = this.blocks[0];
+    } else {
       this.pageTitle = this.createBlock("h1");
       this.pageTitle.placeholder = "Untitled";
 
       this.blocks.push(this.pageTitle, this.createBlock("default"));
     }
 
-    this.blocks.forEach((block) => this.element.appendChild(block));
+    this.blocks.forEach((block) => {
+      this.element.appendChild(block);
+
+      Object.entries(events || {}).forEach(([eventName, callback]) => {
+        block.addEventListener(eventName, () => callback(event, block));
+      });
+    });
 
     addEventListener("contextmenu", (event) => {
+      if (
+        this.commandPalette ||
+        (event.target !== this.element &&
+          !this.blocks.includes(/** @type {Block} */ (event.target)))
+      )
+        return;
+
       event.preventDefault();
-      if (this.commandPalette) return;
       // @ts-ignore
       const { clientX: x, clientY: y } = event;
 
